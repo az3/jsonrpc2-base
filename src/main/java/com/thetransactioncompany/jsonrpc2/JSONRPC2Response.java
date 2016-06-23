@@ -1,7 +1,7 @@
 package com.thetransactioncompany.jsonrpc2;
 
 
-import java.util.*;
+import java.util.Map;
 
 import net.minidev.json.JSONObject;
 
@@ -108,11 +108,7 @@ import net.minidev.json.JSONObject;
  *     null        <--->  null
  * </pre>
  *
- * <p>The JSON-RPC 2.0 specification and user group forum can be found 
- * <a href="http://groups.google.com/group/json-rpc">here</a>.
- *
  * @author Vladimir Dzhuvinov
- * @version 1.26 (2010-07-10)
  */
 public class JSONRPC2Response extends JSONRPC2Message {
 	
@@ -139,6 +135,7 @@ public class JSONRPC2Response extends JSONRPC2Message {
 	 * Parses a JSON-RPC 2.0 response string. This method is thread-safe.
 	 *
 	 * @param jsonString The JSON-RPC 2.0 response string, UTF-8 encoded.
+	 *                   Must not be {@code null}.
 	 *
 	 * @return The corresponding JSON-RPC 2.0 response object.
 	 *
@@ -156,6 +153,7 @@ public class JSONRPC2Response extends JSONRPC2Message {
 	 * Parses a JSON-RPC 2.0 response string. This method is thread-safe.
 	 *
 	 * @param jsonString    The JSON-RPC 2.0 response string, UTF-8 encoded.
+	 *                      Must not be {@code null}.
 	 * @param preserveOrder {@code true} to preserve the order of JSON 
 	 *                      object members in results.
 	 *
@@ -164,7 +162,8 @@ public class JSONRPC2Response extends JSONRPC2Message {
 	 * @throws JSONRPC2ParseException With detailed message if parsing 
 	 *                                failed.
 	 */
-	public static JSONRPC2Response parse(final String jsonString, final boolean preserveOrder)
+	public static JSONRPC2Response parse(final String jsonString, 
+		                             final boolean preserveOrder)
 		throws JSONRPC2ParseException {
 	
 		return parse(jsonString, preserveOrder, false, false);
@@ -175,6 +174,7 @@ public class JSONRPC2Response extends JSONRPC2Message {
 	 * Parses a JSON-RPC 2.0 response string. This method is thread-safe.
 	 *
 	 * @param jsonString    The JSON-RPC 2.0 response string, UTF-8 encoded.
+	 *                      Must not be {@code null}.
 	 * @param preserveOrder {@code true} to preserve the order of JSON 
 	 *                      object members in results.
 	 * @param ignoreVersion {@code true} to skip a check of the 
@@ -186,7 +186,9 @@ public class JSONRPC2Response extends JSONRPC2Message {
 	 * @throws JSONRPC2ParseException With detailed message if the parsing 
 	 *                                failed.
 	 */
-	public static JSONRPC2Response parse(final String jsonString, final boolean preserveOrder, final boolean ignoreVersion)
+	public static JSONRPC2Response parse(final String jsonString, 
+		                             final boolean preserveOrder, 
+		                             final boolean ignoreVersion)
 		throws JSONRPC2ParseException {
 	
 		return parse(jsonString, preserveOrder, ignoreVersion, false);
@@ -197,7 +199,7 @@ public class JSONRPC2Response extends JSONRPC2Message {
 	 * Parses a JSON-RPC 2.0 response string. This method is thread-safe.
 	 *
 	 * @param jsonString            The JSON-RPC 2.0 response string, UTF-8 
-	 *                              encoded.
+	 *                              encoded. Must not be {@code null}.
 	 * @param preserveOrder         {@code true} to preserve the order of  
 	 *                              JSON object members in results.
 	 * @param ignoreVersion         {@code true} to skip a check of the 
@@ -228,8 +230,9 @@ public class JSONRPC2Response extends JSONRPC2Message {
 	 * Creates a new JSON-RPC 2.0 response to a successful request.
 	 *
 	 * @param result The result. The value can <a href="#map">map</a> 
-	 *               to any JSON type.
-	 * @param id     The request identifier echoed back to the caller. 
+	 *               to any JSON type. May be {@code null}.
+	 * @param id     The request identifier echoed back to the caller. May 
+	 *               be {@code null} though not recommended.
 	 */
 	public JSONRPC2Response(final Object result, final Object id) {
 	
@@ -242,7 +245,8 @@ public class JSONRPC2Response extends JSONRPC2Message {
 	 * Creates a new JSON-RPC 2.0 response to a successful request which
 	 * result is {@code null}.
 	 *
-	 * @param id     The request identifier echoed back to the caller. 
+	 * @param id The request identifier echoed back to the caller. May be 
+	 *           {@code null} though not recommended.
 	 */
 	public JSONRPC2Response(final Object id) {
 	
@@ -255,7 +259,7 @@ public class JSONRPC2Response extends JSONRPC2Message {
 	 * Creates a new JSON-RPC 2.0 response to a failed request.
 	 * 
 	 * @param error A JSON-RPC 2.0 error instance indicating the
-	 *              cause of the failure.
+	 *              cause of the failure. Must not be {@code null}.
 	 * @param id    The request identifier echoed back to the caller.
 	 *              Pass a {@code null} if the request identifier couldn't
 	 *              be determined (e.g. due to a parse error).
@@ -274,17 +278,9 @@ public class JSONRPC2Response extends JSONRPC2Message {
 	 * error data will be invalidated.
 	 *
 	 * @param result The result. The value can <a href="#map">map</a> to 
-	 *               any JSON type.
+	 *               any JSON type. May be {@code null}.
 	 */
 	public void setResult(final Object result) {
-		
-		if (   result != null             &&
-		    ! (result instanceof Boolean) &&
-		    ! (result instanceof Number ) &&
-		    ! (result instanceof String ) &&
-		    ! (result instanceof List   ) &&
-		    ! (result instanceof Map    )    )
-		    	throw new IllegalArgumentException("The result must map to a JSON type");
 		
 		// result and error are mutually exclusive
 		this.result = result;
@@ -294,10 +290,10 @@ public class JSONRPC2Response extends JSONRPC2Message {
 	
 	/** 
 	 * Gets the result of the request. The returned value has meaning
-	 * only if the request was successful. Use the {@link #getError getError}
-	 * method to check this.
+	 * only if the request was successful. Use the 
+	 * {@link #getError getError} method to check this.
 	 *
-	 * @return The result
+	 * @return The result.
 	 */
 	public Object getResult() {
 		
@@ -311,13 +307,13 @@ public class JSONRPC2Response extends JSONRPC2Message {
 	 * will turn it into a response indicating failure. Any previously set 
 	 * result data will be invalidated.
 	 *
-	 * @param error A JSON-RPC 2.0 error instance indicating the
-	 *              cause of the failure.
+	 * @param error A JSON-RPC 2.0 error instance indicating the cause of 
+	 *              the failure. Must not be {@code null}.
 	 */
 	public void setError(final JSONRPC2Error error) {
 		
 		if (error == null)
-			throw new NullPointerException("The error object cannot be null");
+			throw new IllegalArgumentException("The error object cannot be null");
 		
 		// result and error are mutually exclusive
 		this.error = error;
@@ -330,8 +326,8 @@ public class JSONRPC2Response extends JSONRPC2Message {
 	 * If a {@code null} is returned, the request succeeded and there was
 	 * no error.
 	 *
-	 * @return A JSON-RPC 2.0 error object, {@code null} if the
-	 *         response indicates success.
+	 * @return A JSON-RPC 2.0 error object, {@code null} if the response
+	 *         indicates success.
 	 */
 	public JSONRPC2Error getError() {
 		
@@ -348,11 +344,8 @@ public class JSONRPC2Response extends JSONRPC2Message {
 	 *         there was an error.
 	 */
 	public boolean indicatesSuccess() {
-		
-		if (error == null)
-			return true;
-		else
-			return false;
+
+		return error == null;
 	}
 	
 	
@@ -365,13 +358,15 @@ public class JSONRPC2Response extends JSONRPC2Message {
 	 */
 	public void setID(final Object id) {
 		
-		if (   id != null             &&
-		    ! (id instanceof Boolean) &&
-		    ! (id instanceof Number ) &&
-		    ! (id instanceof String )    )
-			throw new IllegalArgumentException("The request identifier must map to a JSON scalar");
-		
-		this.id = id;
+        if (id == null            ||
+            id instanceof Boolean ||
+            id instanceof Number  ||
+            id instanceof String
+        ) {
+            this.id = id;
+        } else {
+            this.id = id.toString();
+        }
 	}
 	
 	
@@ -388,18 +383,14 @@ public class JSONRPC2Response extends JSONRPC2Message {
 	}
 	
 	
-	/** 
-	 * Gets a JSON representation of this JSON-RPC 2.0 response.
-	 *
-	 * @return A JSON object representing the response.
-	 */
-	public JSONObject toJSON() {
+	@Override
+	public JSONObject toJSONObject() {
 		
 		JSONObject out = new JSONObject();
 		
 		// Result and error are mutually exclusive
 		if (error != null) {
-			out.put("error", error.toJSON());
+			out.put("error", error.toJSONObject());
 		}
 		else {
 			out.put("result", result);
@@ -410,17 +401,12 @@ public class JSONRPC2Response extends JSONRPC2Message {
 		out.put("jsonrpc", "2.0");
 		
 		
-		Map <String,Object> nonStdAttributes = getNonStandardAttributes();
+		Map <String,Object> nonStdAttributes = getNonStdAttributes();
 		
 		if (nonStdAttributes != null) {
 		
-			Iterator<Map.Entry<String,Object>> it = nonStdAttributes.entrySet().iterator();
-			
-			while (it.hasNext()) {
-			
-				Map.Entry <String,Object> pair = it.next();
-				out.put(pair.getKey(), pair.getValue());
-			}
+			for (final Map.Entry<String,Object> attr: nonStdAttributes.entrySet())
+				out.put(attr.getKey(), attr.getValue());
 		}
 		
 		return out;

@@ -10,20 +10,21 @@
  * applications in the spirit of Ajax and Web 2.0.
  *
  * <p>This package implements <b>version 2.0</b> of the protocol, with the 
- * exception of <i>batching/multicall</i>. This feature was deliberately left
+ * exception of <i>batching / multicall</i>. This feature is deliberately left
  * out as it tends to confuse users (judging by posts in the JSON-RPC forum).
  *
- * The JSON-RPC 2.0 specification and user group forum can be found 
- * <a href="http://groups.google.com/group/json-rpc">here</a>.
+ * <p>See the <a href="http://www.jsonrpc.org/specification"></a>JSON-RPC 2.0
+ * specification</a> for more information or write to the
+ * <a href="https://groups.google.com/forum/#!forum/json-rpc">user group</a> if
+ * you have questions.
  *
  * <p><b>Package dependencies:</b> The classes in this package rely on the 
  * {@code net.minidev.json} and {@code net.minidev.json.parser} packages 
- * (version 1.0.9 and compabile) for JSON encoding and decoding. You can obtain
+ * (version 1.1.1 and compabile) for JSON encoding and decoding. You can obtain
  * them from the <a href="http://code.google.com/p/json-smart/">JSON-Smart</a> 
  * website.
  *
  * @author Vladimir Dzhuvinov
- * @version 1.26 (2011-08-05)
  */
 package com.thetransactioncompany.jsonrpc2;
 

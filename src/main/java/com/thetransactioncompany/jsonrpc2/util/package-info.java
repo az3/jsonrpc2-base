@@ -5,16 +5,16 @@
  * <p>The following parameter type conversion choices are available:
  *
  * <ul>
- *     <li>JSON true/false to Java {@code boolean}</li>
+ *     <li>JSON true/false to Java {@code boolean}
  *     <li>JSON number to Java {@code int}, {@code long}, {@code float} or 
- *         {@code double}</li>
- *     <li>JSON string to {@code java.lang.String}</li>
+ *         {@code double}
+ *     <li>JSON string to {@code java.lang.String}
  *     <li>Predefined (enumerated) JSON string to a Java {@code enum} constant
- *         or {@code java.lang.String}</li>
+ *         or {@code java.lang.String}
  *     <li>JSON array to Java {@code boolean[]}, {@code int[]}, {@code long[]},
  *         {@code float[]}, {@code double[]} or {@code string[]} array, or 
- *         to mixed type {@code java.util.List}</li>
- *     <li>JSON object to {@code java.util.Map}</li>
+ *         to mixed type {@code java.util.List}
+ *     <li>JSON object to {@code java.util.Map}
  * </ul>
  *
  * <p>If a parameter cannot be retrieved, either because it's missing or
@@ -38,7 +38,6 @@
  * sister {@link com.thetransactioncompany.jsonrpc2} package.
  *
  * @author Vladimir Dzhuvinov
- * @version 1.26 (2011-10-16)
  */
 package com.thetransactioncompany.jsonrpc2.util;
 

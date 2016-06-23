@@ -5,26 +5,28 @@ package com.thetransactioncompany.jsonrpc2;
  * Thrown to indicate an exception during the parsing of a JSON-RPC 2.0 
  * message string.
  *
- * <p>The JSON-RPC 2.0 specification and user group forum can be found 
- * <a href="http://groups.google.com/group/json-rpc">here</a>.
- *
  * @author Vladimir Dzhuvinov
- * @version 1.26 (2010-05-18)
  */
 public class JSONRPC2ParseException extends Exception {
 	
 	
 	/**
+	 * Serial version UID.
+	 */
+	private static final long serialVersionUID = 3376608778436136410l;
+
+
+	/**
 	 * Indicates a parse exception caused by a JSON message not conforming
 	 * to the JSON-RPC 2.0 protocol.
 	 */
-	public static int PROTOCOL = 0;
+	public static final int PROTOCOL = 0;
 	
 	
 	/**
 	 * Indicates a parse exception caused by invalid JSON.
 	 */
-	public static int JSON = 1;
+	public static final int JSON = 1;
 	
 	
 	/**

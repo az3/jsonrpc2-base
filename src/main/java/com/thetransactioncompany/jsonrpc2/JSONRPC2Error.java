@@ -1,11 +1,12 @@
 package com.thetransactioncompany.jsonrpc2;
 
+
 import net.minidev.json.JSONObject;
 
 
 /** 
- * Represents a JSON-RPC 2.0 error that occured during the processing of a 
- * request.
+ * Represents a JSON-RPC 2.0 error that occurred during the processing of a 
+ * request. This class is immutable.
  *
  * <p>The protocol expects error objects to be structured like this:
  *
@@ -48,15 +49,17 @@ import net.minidev.json.JSONObject;
  *     null        <--->  null
  * </pre>
  *
- * <p>The JSON-RPC 2.0 specification and user group forum can be found 
- * <a href="http://groups.google.com/group/json-rpc">here</a>.
- *
  * @author Vladimir Dzhuvinov
- * @version 1.26 (2011-08-05)
  */
 public class JSONRPC2Error extends Exception {
 	
 	
+	/**
+	 * Serial version UID.
+	 */
+	private static final long serialVersionUID = 4682571044532698806l;
+
+
 	/** 
 	 * JSON parse error (-32700).
 	 */
@@ -90,13 +93,45 @@ public class JSONRPC2Error extends Exception {
 	/**
 	 * The error code.
 	 */
-	private int code;
+	private final int code;
 	
 	
 	/**
 	 * The optional error data.
 	 */
-	private Object data;
+	private final Object data;
+
+
+	/**
+	 * Appends the specified string to the message of a JSON-RPC 2.0 error.
+	 *
+	 * @param err The JSON-RPC 2.0 error. Must not be {@code null}.
+	 * @param apx The string to append to the original error message.
+	 *
+	 * @return A new JSON-RPC 2.0 error with the appended message.
+	 */
+	@Deprecated
+	public static JSONRPC2Error appendMessage(final JSONRPC2Error err, final String apx) {
+
+		return new JSONRPC2Error(err.getCode(), err.getMessage() + apx, err.getData());
+	}
+
+
+	/**
+	 * Sets the specified data to a JSON-RPC 2.0 error.
+	 *
+	 * @param err  The JSON-RPC 2.0 error to have its data field set. Must
+	 *             not be {@code null}.
+	 * @param data Optional error data, must <a href="#map">map</a> to a 
+	 *             valid JSON type.
+	 *
+	 * @return A new JSON-RPC 2.0 error with the set data.
+	 */
+	@Deprecated
+	public static JSONRPC2Error setData(final JSONRPC2Error err, final Object data) {
+
+		return new JSONRPC2Error(err.getCode(), err.getMessage(), data);
+	}
 	
 	
 	/** 
@@ -109,8 +144,7 @@ public class JSONRPC2Error extends Exception {
 	 */
 	public JSONRPC2Error(int code, String message) {
 		
-		super(message);
-		this.code = code;
+		this(code, message, null);
 	}
 	
 	
@@ -152,14 +186,52 @@ public class JSONRPC2Error extends Exception {
 		
 		return data;	
 	}
+
+
+	/**
+	 * Sets the specified data to a JSON-RPC 2.0 error.
+	 *
+	 * @param data Optional error data, must <a href="#map">map</a> to a 
+	 *             valid JSON type.
+	 *
+	 * @return A new JSON-RPC 2.0 error with the set data.
+	 */
+	public JSONRPC2Error setData(final Object data) {
+
+		return new JSONRPC2Error(code, getMessage(), data);
+	}
+
+
+	/**
+	 * Appends the specified string to the message of this JSON-RPC 2.0 
+	 * error.
+	 *
+	 * @param apx The string to append to the original error message.
+	 *
+	 * @return A new JSON-RPC 2.0 error with the appended message.
+	 */
+	public JSONRPC2Error appendMessage(final String apx) {
+
+		return new JSONRPC2Error(code, getMessage() + apx, data);
+	}
 	
 	
 	/** 
-	 * Gets a JSON representation of the JSON-RPC 2.0 error.
+	 * @see #toJSONObject
+	 */
+	@Deprecated
+	public JSONObject toJSON() {
+	
+		return toJSONObject();
+	}
+	
+	
+	/** 
+	 * Returns a JSON object representation of this JSON-RPC 2.0 error.
 	 *
 	 * @return A JSON object representing this error object.
 	 */
-	public JSONObject toJSON() {
+	public JSONObject toJSONObject() {
 	
 		JSONObject out = new JSONObject();
 		
@@ -177,6 +249,7 @@ public class JSONRPC2Error extends Exception {
 	 *
 	 * @return A JSON-encoded string representing this error object.
 	 */
+	@Override
 	public String toString() {
 		
 		return toJSON().toString();
@@ -191,8 +264,11 @@ public class JSONRPC2Error extends Exception {
          * @return {@code true} if both objects are instances if this class and
 	 *         their error codes are identical, {@code false} if not.
          */
+	@Override
         public boolean equals(Object object) {
         
-                return object instanceof JSONRPC2Error && code == ((JSONRPC2Error)object).getCode();
+                return object != null &&
+                       object instanceof JSONRPC2Error && 
+                       code == ((JSONRPC2Error)object).getCode();
         }
 }
